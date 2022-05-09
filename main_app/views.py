@@ -1,29 +1,37 @@
 from django.shortcuts import render
-
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Finch
 # Create your views here.
-from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
-
-# Add the Cat class & list and view function below the imports
-class Finch:  # Note that parens are optional if not inheriting from another class
-  def __init__(self, name, breed, description, age):
-    self.name = name
-    self.breed = breed
-    self.description = description
-    self.age = age
-
-finches = [
-  Finch('Alex', 'tabby', 'little demon', 3),
-  Finch('EJ', 'tortoise shell', 'diluted tortoise shell', 0),
-  Finch('Maroof', 'black tripod', '1 legged finch', 4)
-]
 
 def home(request):
-  return HttpResponse('<h1> Birdiesssssss <Oo/V\oO> </h1>')
+  return render(request, 'home.html')
 
 def about(request):
   return render(request, 'about.html')
 
 def finches_index(request):
-  return render(request, 'finches/index.html', { 'finches': finches })
+  finches = Finch.objects.all()
+  #                             data context |
+  return render(request, 'finches/index.html', {
+    'finches': finches,
+  })
+
+def finches_detail(request, finch_id):
+  finch = Finch.objects.get(id=finch_id)
+  return render(request, 'finches/detail.html', {
+    'finch': finch
+  })
+
+class FinchCreate(CreateView):
+  model = Finch
+  fields = '__all__'
+  
+class FinchUpdate(UpdateView):
+  model = Finch
+  fields = ['breed', 'description', 'age']
+
+class FinchDelete(DeleteView):
+  model = Finch
+  success_url = '/finches/'
+
+
