@@ -6,10 +6,7 @@
 {% else %}
   <h1>Add Finch</h1>
 {% endif %}
-<!-- HTML forms will post back to the same
-     URL that's in the address bar if the 
-     action attribute is empty
--->
+
 <form action="" method="POST">
   {% csrf_token %}
   <table>
